@@ -12,26 +12,32 @@ func load_state_from_context(context : Dictionary):
 	print_debug("Loading state from the context...")
 
 	player = null
-	upgrades = null
+	upgrades.clear()
 
-	add_materials_from_context(context.get("upgrades", {}))
+	# UPGRADES NEEDS TO BE CREATED FIRST!!!
+	for upgrade_context in context.get("upgrades", {}):
+		add_upgrade_from_context(upgrade_context)
 
 	add_player_from_context(context.get("player", {}))
-
 
 func save_state_to_context() -> Dictionary:
 	var context := {}
 
 	var context_dict := {
-		"player": player.context,
-		"upgrades": upgrades.context,
+		"player": player,
+		"upgrades": upgrades,
 	}
 
+	for key in ["upgrades"]:
+		context[key] = []
+		for context_owner in context_dict[key]:
+			var subcontext : Dictionary = context_owner.context
+			if not subcontext.empty():
+				context[key].append(subcontext)
+
 	context["player"] = player.context
-	context["upgrades"] = upgrades.context
 
 	return context
-
 
 ## PLAYERS ####################################################################
 var player: PlayerState = null
@@ -40,21 +46,24 @@ func add_player_from_context(player_context : Dictionary) -> void:
 	player = _player_resource.new()
 	player.context = player_context
 
-
 ## UPGRADES ####################################################################
-var upgrades: UpgradeState = null
+var upgrades := []
 
-func add_material(material_type: String, amount: int) -> void:
-	if material_type in upgrades:
-		upgrades[material_type] += amount
-	else:
-		upgrades[material_type] = amount
+func add_new_upgrade(upgrade_id : String) -> void:
+	var upgrade := _upgrade_resource.new()
+	upgrade.id = upgrade_id
 
+	print_debug("adding brand-new upgrade with id '{0}' to State!".format([upgrade_id]))
+	upgrades.append(upgrade)
 
-func get_material_amount(material_type: String) -> int:
-	return upgrades.context.get(material_type, 0)
+func add_upgrade_from_context(upgrade_context : Dictionary) -> void:
+	var upgrade := _upgrade_resource.new()
+	upgrade.context = upgrade_context
 
-func add_materials_from_context(upgrade_context : Dictionary) -> void:
-	upgrades = _upgrade_resource.new()
-	upgrades.context = upgrade_context
+	upgrades.append(upgrade)
 
+func get_upgrades_by_id() -> Array:
+	var upgrade_ids := []
+	for upgrade in upgrades:
+		upgrade_ids.append(upgrade.id)
+	return upgrade_ids

@@ -12,8 +12,6 @@ var markers = null
 
 var map = null
 
-var canvas = null
-
 var sun_position = Vector2(-4300, 2500)
 
 func register_overlay(overlay_name, overlay: Control):
@@ -50,10 +48,6 @@ func register_map(new_map):
 	map = new_map
 
 
-func register_canvas(new_canvas):
-	canvas = new_canvas
-
-
 func is_ship(body):
 	return body is Ship
 
@@ -87,7 +81,6 @@ func is_station(body):
 
 var player = null
 var followers = []
-var in_igps
 var stations_in_proximity = []
 var player_mindframe = "EXPLORE"
 
@@ -133,10 +126,3 @@ func remove_station(station):
 	stations_in_proximity.erase(station)
 	if player_mindframe == "HOME":
 		set_player_mindframe("EXPLORE")
-
-
-func enter_igps():
-	in_igps = true
-
-func exit_igps():
-	in_igps = false

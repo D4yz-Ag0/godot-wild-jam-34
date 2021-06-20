@@ -72,7 +72,6 @@ func turn_off():
 
 
 func _process(delta):
-	set_player(GameFlow.player)
 	if player == null:
 		return
 

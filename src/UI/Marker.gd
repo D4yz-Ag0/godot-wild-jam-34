@@ -1,6 +1,7 @@
 extends Node2D
 
 
+var player = null
 var destination = null
 
 const markers = {
@@ -33,9 +34,7 @@ func set_marker_destination():
 func set_marker(marker_type):
 	$Marked.texture = markers[marker_type]
 
-
 func _process(delta):
-	var player = GameFlow.player
 	if destination == null or player == null:
 		return
 	if destination.position.distance_to(player.position) < 500:

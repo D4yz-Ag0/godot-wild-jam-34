@@ -34,9 +34,6 @@ radial_accel = 10.0
 scale_amount = 0.25
 color_ramp = ExtResource( 3 )
 
-[node name="ExplosionArea" parent="." index="6"]
-visible = false
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="10"]
 position = Vector2( -0.0784645, -0.00638199 )
 shape = SubResource( 1 )
